@@ -1,0 +1,77 @@
+I3C File Structure
+==================
+This file contains a description of the I3C File.
+
+**As the algorythm for the reading and rendering of this type of file is still under development, the content of this file is subject to change. 
+
+
+What is This Type of File For?
+==============================
+The purpose of this type of file is to provide a support to store a 3D image as a map of pixel instead of the typical approach(using polygons). This type of file would be appropriated for objects which need to be detailled or that contains unusual shapes (Typical example: human face). This file is designed to store static images. An extension witch would be able to store motion in these 3D images is planned for the futur(as soon as the algorithm for the static images is done). 
+
+
+The Way Data are Stored
+=======================
+An important fact is that the image HAS to be a cube. Parts of that cube may stay empty to make it look like another shape but the image has to be considered as a cube when it is stores in a I3C file. The lenght of the cube HAS to be in base 2 (2,4,8,16,32,...).
+
+The image (Global Cube) is subdiveded in 8 child cubes; the side of each of these 8 childs cubes is half the lenght of the side of the parent (in this case the global cube). Each of these cubes are then subdivided into 8 child cubes witch the lenght of their side is half the lenght of the side of its parent. This process is repeated down to the pixel level where a cube can store the value of 8 pixels.
+
+Each cubes containing at least 1 pixel that is not empty should be written in the file. The first set of cubes to be written are those at the pixel level. These cubes contains the pixel values directly. Each cube can store up to 8 pixel values. Of course, not all 8 pixels has to be written. That's why with each pixel cubes comes with a map containing a description of witch of the 8 cubes are empty and witch are not. The other information stored in the cubes at the pixel level is the values of the pixels it contains. The number of values needed is dynamic depending on the map given.
+
+Then comes the cubes that stores 8 smaller cubes. The cubes are written in a similar way as the pixel level cubes. A map describe witch of the 8 possible child cubes are not empty. It begins with the cubes at the pixel level, then the cubes that contains the cubes at the pixel level and so on.
+
+
+Organisation of the File
+========================
+The Organisation of the I3C file is devided in two principal parts:
+{
+-Header
+-Data
+}
+The exact content of these parts are described in the following sections.
+
+
+File Header
+===========
+The header of the file contains information about the image, including its size, the number of cubes at the pixel level that are not empty and the number of cubes at each level.
+
+[lenght of one side of the cube](in pixel)
+[the total number of cubes at the pixel level in the image]
+[the number of cubes at the second level in the image](if applicable)
+[the number of cubes at the third level in the image](if applicable)
+[...](the total number of level will be log_base2(lenght of one side of the cube))
+
+
+File Data
+=========
+The data bloc contains data about the cubes that makes the images. The data block is divide into a serie of cube description. The cube can either be a cube containing pixels or cubes that contains other cubes. All the cubes that contains pixels are written first and then all the cubes that contains other cubes are written; one level at the time, beginning with level 2.
+
+[Pixel Level Cube]
+[Pixel Level Cube]
+[Pixel Level Cube]
+[...](Matching the number of cube at the pixel level written in the header)
+[Cube of Cube level 2]
+[Cube of Cube level 2]
+[Cube of Cube level 2]
+[...](Matching the number of cube at level 2 written in the header)
+[Cube of Cube level 3]
+[...](Matching the number of cube at level 3 written in the header)
+[... up to the matching number of level written in the header]
+
+
+Pixel Level Cube
+----------------
+
+[Map](unsignged char)=> 1=pixel there, 0=pixel not there
+[Red value](unsigned char)
+[Green value](unsigned char)
+[Blue value](unsigned char)
+
+Cube of Cube
+------------
+
+[Map](unsignged char)=> 1=pixel there, 0=pixel not there
+
+
+
+Copyright (C) 2014 Pascal Gendron
