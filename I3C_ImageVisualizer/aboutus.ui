@@ -68,7 +68,7 @@ them easilly, ...</string>
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../GVisionLogo.png</pixmap>
+    <pixmap>../ressources/GVisionLogo.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>

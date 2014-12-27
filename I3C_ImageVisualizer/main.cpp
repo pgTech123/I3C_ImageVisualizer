@@ -31,7 +31,7 @@
 #include "mainwindow.h"
 
 /* Program Parameters */
-#define ICON_PATH           "./../GVisionLogo.ico"
+#define ICON_PATH           "./../ressources/GVisionLogo.ico"
 #define APPLICATION_NAME    "GV3DFile"
 
 int main(int argc, char *argv[])
